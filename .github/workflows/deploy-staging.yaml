@@ -57,9 +57,9 @@ jobs:
         with:
           args: "apply -f ./kubectlapply.yaml --force"
 
-      - name: Trigger deploy to staging-ut1
-        uses: peter-evans/repository-dispatch@master
-        with:
-          token: ${{ secrets.DISPATCH_TOKEN }}
-          event-type: deploy-ut1
-          client-payload: '{"sha": "${{ github.sha }}"}'
+#      - name: Trigger deploy to staging-ut1
+#        uses: peter-evans/repository-dispatch@master
+#        with:
+#          token: ${{ secrets.DISPATCH_TOKEN }}
+#          event-type: deploy-ut1
+#          client-payload: '{"sha": "${{ github.sha }}"}'
