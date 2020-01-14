@@ -1,5 +1,0 @@
-name: Deploy to digdir
-
-on:
-  repository_dispatch:
-    types: [never]
