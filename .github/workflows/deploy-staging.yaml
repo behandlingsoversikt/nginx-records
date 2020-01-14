@@ -24,10 +24,10 @@ jobs:
       - run: gcloud auth configure-docker
 
       - name: Build Docker image with GitHub commit sha tag
-        run: docker build . -t eu.gcr.io/fdk-infra/fdk-nginx-registration:$GITHUB_SHA -t eu.gcr.io/fdk-infra/fdk-nginx-registration:staging_latest
+        run: docker build . -t eu.gcr.io/fdk-infra/fdk-nginx-records:$GITHUB_SHA -t eu.gcr.io/fdk-infra/fdk-nginx-records:staging_latest
 
       - name: Publish docker image to Google Cloud
-        run: docker -- push eu.gcr.io/fdk-infra/fdk-nginx-registration
+        run: docker -- push eu.gcr.io/fdk-infra/fdk-nginx-records
 
       - name: Apply Helm template
         uses: stefanprodan/kube-tools@v1
@@ -36,8 +36,8 @@ jobs:
           command: |
             helm init --client-only
             helm repo add fdk https://informasjonsforvaltning.github.io/helm-chart/
-            helm fetch --untar --untardir ./helm fdk/fdk-nginx-registration
-            helm template --set DOCKER_IMAGE_NAME="eu.gcr.io/fdk-infra/fdk-nginx-registration:$GITHUB_SHA" -f ./helm/fdk-nginx-registration/values/staging.yaml ./helm/fdk-nginx-registration/ > ./kubectlapply.yaml
+            helm fetch --untar --untardir ./helm fdk/fdk-nginx-records
+            helm template --set DOCKER_IMAGE_NAME="eu.gcr.io/fdk-infra/fdk-nginx-records:$GITHUB_SHA" -f ./helm/fdk-nginx-records/values/staging.yaml ./helm/fdk-nginx-records/ > ./kubectlapply.yaml
             cat ./kubectlapply.yaml
             chmod o+w ./kubectlapply.yaml
             cat kubectlapply.yaml
@@ -57,9 +57,9 @@ jobs:
         with:
           args: "apply -f ./kubectlapply.yaml --force"
 
-      - name: Trigger deploy to staging-ut1
-        uses: peter-evans/repository-dispatch@master
-        with:
-          token: ${{ secrets.DISPATCH_TOKEN }}
-          event-type: deploy-ut1
-          client-payload: '{"sha": "${{ github.sha }}"}'
+#      - name: Trigger deploy to staging-ut1
+#        uses: peter-evans/repository-dispatch@master
+#        with:
+#          token: ${{ secrets.DISPATCH_TOKEN }}
+#          event-type: deploy-ut1
+#          client-payload: '{"sha": "${{ github.sha }}"}'
